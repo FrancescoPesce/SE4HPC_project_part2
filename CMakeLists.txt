@@ -18,7 +18,7 @@ set(SOURCES src/main.cpp)
 add_executable(main ${SOURCES})
 target_link_libraries(main ${MPI_LIBRARIES} ${CMAKE_SOURCE_DIR}/lib/libmatrix_multiplication_without_errors.a)
 
-
+# We added the src/matrix_mult.cpp dependency because it's needed to compile the test.
 add_executable(test_multiplication test/test_matrix_multiplication.cpp src/matrix_mult.cpp)
 target_link_libraries(test_multiplication gtest gtest_main ${CMAKE_SOURCE_DIR}/lib/libmatrix_multiplication_without_errors.a ${MPI_LIBRARIES})
 
