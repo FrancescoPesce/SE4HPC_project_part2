@@ -19,8 +19,6 @@ From: ubuntu:20.04
     include/* /app/include/
     lib/* /app/lib/
     build.sh /app/
-    matrixA.txt /app/
-    matrixB.txt /app/
     test/* /app/test/
     googletest/* /app/googletest/
 
