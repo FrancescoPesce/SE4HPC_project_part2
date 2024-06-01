@@ -14,15 +14,15 @@ From: ubuntu:20.04
 
 %files
     # Copy all relevant files to the container
-    src/ /app/src/
+    src/* /app/src/
     CMakeLists.txt /app/
-    include/ /app/include/
-    lib/ /app/lib/
+    include/* /app/include/
+    lib/* /app/lib/
     build.sh /app/
     matrixA.txt /app/
     matrixB.txt /app/
-    test/ /app/test/
-    googletest/ /app/googletest/
+    test/* /app/test/
+    googletest/* /app/googletest/
 
 %environment
     # Set environment variables
