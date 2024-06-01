@@ -60,7 +60,7 @@ jobs:
 
     - name: Build Singularity image
       run: |
-        singularity build myimage.sif Singularity.def
+        singularity build --fakeroot myimage.sif Singularity.def
 
     - name: Run Singularity image
       run: |
