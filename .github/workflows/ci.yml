@@ -39,5 +39,8 @@ jobs:
     - name: Run Tests
       run: ctest --test-dir build
 
+    - name: Install Singularity
+      run: sudo apt-get install singularity-container
+
     - name: Create a container image
       run: sudo singularity build --sandbox singularity_container/ Singularity.def
