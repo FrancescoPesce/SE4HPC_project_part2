@@ -4,7 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -12,12 +11,10 @@ jobs:
       with:
         submodules: recursive
 
-    - uses: eWaterCycle/setup-singularity@v7
-      with:
-        singularity-version: 3.8.3
-    
     - name: Install clang-format
-      run: sudo apt-get install clang-format
+      run: |
+        sudo apt-get update
+        sudo apt-get install clang-format
      
     - name: Run clang-format
       run: clang-format -i src/*.cpp include/*.h test/*.cpp
@@ -43,17 +40,28 @@ jobs:
     - name: Run Tests
       run: ctest --test-dir build
 
-    - name: Source bashrc
-      run: source ~/.bashrc
+    - name: Install Singularity dependencies
+      run: sudo apt-get install -y build-essential libseccomp-dev pkg-config squashfs-tools cryptsetup
 
-    - name: Print the content of the bashrc
-      run: cat ~/.bashrc
+    - name: Download and install Go
+      run: |
+        wget https://dl.google.com/go/go1.18.3.linux-amd64.tar.gz
+        sudo tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz
+        echo 'export PATH=$PATH:/usr/local/go/bin' >> $GITHUB_ENV
 
-    - name: Print the content of ${SINGULARITY_ROOT}
-      run: echo ${SINGULARITY_ROOT}
+    - name: Download and install Singularity
+      run: |
+        wget https://github.com/sylabs/singularity/releases/download/v3.8.0/singularity-ce-3.8.0.tar.gz
+        tar -xzf singularity-ce-3.8.0.tar.gz
+        cd singularity-ce-3.8.0
+        ./mconfig
+        make -C builddir
+        sudo make -C builddir install
 
-    - name: Perform ls in ${SINGULARITY_ROOT}
-      run: ls ${SINGULARITY_ROOT}
+    - name: Build Singularity image
+      run: |
+        singularity build myimage.sif Singularity.def
 
-    - name: Create a container image
-      run: sudo ${SINGULARITY_ROOT}/singularity build --sandbox singularity_container/ Singularity.def
+    - name: Run Singularity image
+      run: |
+        singularity run myimage.sif
