@@ -68,7 +68,7 @@ jobs:
         sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./job.sh $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
         sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./matrixA.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
         sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./matrixB.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
-        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./myimage.sig $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
+        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./myimage.sif $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
 
     - name: Run the job on Cineca
       env:
