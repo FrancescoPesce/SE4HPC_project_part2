@@ -24,6 +24,16 @@ jobs:
       run: |
         echo "$SCP_PASSWORD" > password.txt
         sshpass -f password.txt scp -o StrictHostKeyChecking=no -r ./test.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
+
+    - name: Run a one-line script on a remote server
+      env:
+        SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+        SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+      run: |
+        echo "$SSH_PASSWORD" > password.txt
+        sshpass -f password.txt ssh -o StrictHostKeyChecking=no $SCP_USERNAME@login.g100.cineca.it
+        echo "Hello, world!" > hello.txt
+        ./job.sh
       
     # - name: Install cppcheck
     #   run: |
