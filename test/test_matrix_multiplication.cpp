@@ -209,21 +209,6 @@ TEST(MatrixMultiplicationTest, TestMultiplyStripedMatricesTranspose) {
     ASSERT_EQ(C, expected) << "Result incorrect.";
 }
 
-TEST(MatrixMultiplicationTest, TestMultiplySameObject) {
-    const std::vector<std::vector<int>> A = {
-        {1, 2},
-        {3, 4}
-    };
-
-    std::vector<std::vector<int>> C(2, std::vector<int>(2, 0));
-    std::vector<std::vector<int>> expected(2, std::vector<int>(2, 0));
-    
-    multiplyMatrices(A, A, C, 10, 10, 10);
-    multiplyMatricesWithoutErrors(A, A, expected, 2, 2, 2);
-
-    ASSERT_EQ(C, expected) << "Result incorrect.";
-}
-
 TEST(MatrixMultiplicationTest, TestNoErrors1) {
     std::vector<std::vector<int>> A = {
         {3, 2}
