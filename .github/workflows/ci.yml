@@ -31,8 +31,7 @@ jobs:
         SSH_PASSWORD: ${{ secrets.SCP_PASSWORD }}
       run: |
         echo "$SSH_PASSWORD" > password.txt
-        ssh-keygen -f "/home/runner/.ssh/known_hosts" -R "login.g100.cineca.it"
-        sshpass -f password.txt ssh -o StrictHostKeyChecking=no $SSH_USERNAME@login.g100.cineca.it
+        sshpass -f password.txt ssh -o StrictHostKeyChecking=yes $SSH_USERNAME@login.g100.cineca.it
         echo "Hello, world!" > hello.txt
         ./job.sh
         exit
