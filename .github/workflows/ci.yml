@@ -23,7 +23,7 @@ jobs:
         SCP_PASSWORD: ${{ secrets.SCP_PASSWORD }}
       run: |
         echo "$SCP_PASSWORD" > password.txt
-        sshpass -f password.txt scp -o StrictHostKeyChecking=no -r ./test.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
+        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./test.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
 
     - name: Run a one-line script on a remote server
       env:
@@ -31,7 +31,7 @@ jobs:
         SSH_PASSWORD: ${{ secrets.SCP_PASSWORD }}
       run: |
         echo "$SSH_PASSWORD" > password.txt
-        sshpass -f password.txt ssh -o StrictHostKeyChecking=yes $SSH_USERNAME@login.g100.cineca.it
+        sshpass -f password.txt ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $SSH_USERNAME@login.g100.cineca.it
         echo "Hello, world!" > hello.txt
         ./job.sh
         exit
