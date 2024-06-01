@@ -9,6 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: recursive
     
     - name: Install clang-format
       run: sudo apt-get install clang-format
