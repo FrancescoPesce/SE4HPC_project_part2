@@ -11,68 +11,68 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Create an empty file
-      run: touch test.txt
-
     - name: Install SSH client
       run: sudo apt-get update && sudo apt-get install -y openssh-client
+   
+    - name: Install cppcheck
+      run: |
+        sudo apt-get update
+        sudo apt-get install cppcheck
+    
+    - name: Run cppcheck
+      run: cppcheck --enable=all --inconclusive --std=c++17 src
 
-    - name: Copy files via SCP
+    - name: Install MPI
+      run: sudo apt-get install libmpich-dev
+
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1
+
+    - name: Configure CMake
+      run: cmake -S . -B build
+
+    - name: Build with CMake
+      run: cmake --build build
+
+    - name: Run Tests with CTest
+      run: ctest --test-dir build
+
+    - name: Install Singularity dependencies
+      run: sudo apt-get install -y build-essential libseccomp-dev pkg-config squashfs-tools cryptsetup
+
+    - name: Download and install Go
+      run: |
+        wget https://dl.google.com/go/go1.18.3.linux-amd64.tar.gz
+        sudo tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz
+        echo 'export PATH=$PATH:/usr/local/go/bin' >> $GITHUB_ENV
+
+    - name: Download and install Singularity
+      run: |
+        wget https://github.com/sylabs/singularity/releases/download/v3.8.0/singularity-ce-3.8.0.tar.gz
+        tar -xzf singularity-ce-3.8.0.tar.gz
+        cd singularity-ce-3.8.0
+        ./mconfig
+        make -C builddir
+        sudo make -C builddir install
+
+    - name: Build Singularity image
+      run: |
+        singularity build --fakeroot myimage.sif Singularity.def
+
+    - name: Copy files via SCP on Cineca
       env:
         SCP_USERNAME: ${{ secrets.SCP_USERNAME }}
         SCP_PASSWORD: ${{ secrets.SCP_PASSWORD }}
       run: |
         echo "$SCP_PASSWORD" > password.txt
-        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./test.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
+        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./job.sh $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
+        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./matrixA.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
+        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./matrixB.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
+        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./myimage.sig $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
 
-    - name: Run a one-line script on a remote server
+    - name: Run the job on Cineca
       env:
         SSH_USERNAME: ${{ secrets.SCP_USERNAME }}
         SSH_PASSWORD: ${{ secrets.SCP_PASSWORD }}
       run: |
         sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$SSH_USERNAME@login.g100.cineca.it" 'bash -s' < ./job.sh
-      
-    # - name: Install cppcheck
-    #   run: |
-    #     sudo apt-get update
-    #     sudo apt-get install cppcheck
-    
-    # - name: Run cppcheck
-    #   run: cppcheck --enable=all --inconclusive --std=c++17 src
-
-    # - name: Install MPI
-    #   run: sudo apt-get install libmpich-dev
-
-    # - name: Setup CMake
-    #   uses: jwlawson/actions-setup-cmake@v1
-
-    # - name: Configure CMake
-    #   run: cmake -S . -B build
-
-    # - name: Build
-    #   run: cmake --build build
-
-    # - name: Run Tests
-    #   run: ctest --test-dir build
-
-    # - name: Install Singularity dependencies
-    #   run: sudo apt-get install -y build-essential libseccomp-dev pkg-config squashfs-tools cryptsetup
-
-    # - name: Download and install Go
-    #   run: |
-    #     wget https://dl.google.com/go/go1.18.3.linux-amd64.tar.gz
-    #     sudo tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz
-    #     echo 'export PATH=$PATH:/usr/local/go/bin' >> $GITHUB_ENV
-
-    # - name: Download and install Singularity
-    #   run: |
-    #     wget https://github.com/sylabs/singularity/releases/download/v3.8.0/singularity-ce-3.8.0.tar.gz
-    #     tar -xzf singularity-ce-3.8.0.tar.gz
-    #     cd singularity-ce-3.8.0
-    #     ./mconfig
-    #     make -C builddir
-    #     sudo make -C builddir install
-
-    # - name: Build Singularity image
-    #   run: |
-    #     singularity build --fakeroot myimage.sif Singularity.def
