@@ -38,3 +38,6 @@ jobs:
 
     - name: Run Tests
       run: ctest --test-dir build
+
+    - name: Create a container image
+      run: sudo singularity build --sandbox singularity_container/ Singularity.def
