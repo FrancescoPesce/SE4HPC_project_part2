@@ -14,7 +14,7 @@ jobs:
       run: sudo apt-get install clang-format
      
     - name: Run clang-format
-      run: clang-format -i src/*.cpp src/*.h test/*.cpp
+      run: clang-format -i src/*.cpp include/*.h test/*.cpp
       
     - name: Install cppcheck
       run: sudo apt-get install cppcheck
