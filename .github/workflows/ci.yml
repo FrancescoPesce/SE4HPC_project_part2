@@ -40,12 +40,6 @@ jobs:
     - name: Run Tests
       run: ctest --test-dir build
 
-    - name: Set the timezone
-      run: sudo ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
-
-    - name: Set DEBIAN_FRONTEND to noninteractive
-      run: echo 'export DEBIAN_FRONTEND=noninteractive' >> $GITHUB_ENV
-
     - name: Install Singularity dependencies
       run: sudo apt-get install -y build-essential libseccomp-dev pkg-config squashfs-tools cryptsetup
 
