@@ -10,9 +10,6 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
-
-    - name: ls the content of googletest
-      run: ls -l googletest
       
     - name: Install cppcheck
       run: |
@@ -58,7 +55,3 @@ jobs:
     - name: Build Singularity image
       run: |
         singularity build --fakeroot myimage.sif Singularity.def
-
-    - name: Run Singularity image
-      run: |
-        singularity run myimage.sif

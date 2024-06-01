@@ -31,7 +31,6 @@ From: ubuntu:20.04
 %post
     # Configure and build the matrix multiplication program
     cd /app
-    ls -l googletest
     ./build.sh
 
 %runscript
