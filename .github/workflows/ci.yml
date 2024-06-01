@@ -30,10 +30,10 @@ jobs:
         SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
         SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
       run: |
-        echo "$SSH_PASSWORD" > password.txt
-        sshpass -f password.txt ssh -o StrictHostKeyChecking=no $SCP_USERNAME@login.g100.cineca.it
+        sshpass -p $SSH_PASSWORD ssh -o StrictHostKeyChecking=no $SSH_USERNAME@login.g100.cineca.it
         echo "Hello, world!" > hello.txt
         ./job.sh
+        exit
       
     # - name: Install cppcheck
     #   run: |
