@@ -43,5 +43,8 @@ jobs:
     - name: Run Tests
       run: ctest --test-dir build
 
+    - name: Source bashrc
+      run: source ~/.bashrc
+
     - name: Create a container image
-      run: singularity build --fakeroot --sandbox singularity_container/ Singularity.def
+      run: sudo singularity build --sandbox singularity_container/ Singularity.def
