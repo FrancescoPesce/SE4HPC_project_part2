@@ -1,4 +1,4 @@
-name: C++ CI
+name: Test, transfer and run
 
 on: [push, pull_request]
 
@@ -15,9 +15,7 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y openssh-client
    
     - name: Install cppcheck
-      run: |
-        sudo apt-get update
-        sudo apt-get install cppcheck
+      run: sudo apt-get install -y cppcheck
     
     - name: Run cppcheck
       run: cppcheck --enable=all --inconclusive --std=c++17 src
@@ -37,7 +35,7 @@ jobs:
     - name: Run Tests with CTest
       run: ctest --test-dir build
 
-    - name: Install Singularity dependencies
+    - name: Install Singularity dependencies from apt
       run: sudo apt-get install -y build-essential libseccomp-dev pkg-config squashfs-tools cryptsetup
 
     - name: Download and install Go
@@ -59,20 +57,18 @@ jobs:
       run: |
         singularity build --fakeroot myimage.sif Singularity.def
 
-    - name: Copy files via SCP on Cineca
+    - name: Copy files to the cluster
       env:
         SCP_USERNAME: ${{ secrets.SCP_USERNAME }}
         SCP_PASSWORD: ${{ secrets.SCP_PASSWORD }}
       run: |
-        echo "$SCP_PASSWORD" > password.txt
-        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./job.sh $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
-        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./matrixA.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
-        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./matrixB.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
-        sshpass -f password.txt scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./myimage.sif $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
+        sshpass -p "$SCP_PASSWORD" scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./job.sh $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
+        sshpass -p "$SCP_PASSWORD" scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./matrixA.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
+        sshpass -p "$SCP_PASSWORD" scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./matrixB.txt $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
+        sshpass -p "$SCP_PASSWORD" scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ./myimage.sif $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/
 
-    - name: Run the job on Cineca
+    - name: Run the job on the cluster
       env:
         SSH_USERNAME: ${{ secrets.SCP_USERNAME }}
         SSH_PASSWORD: ${{ secrets.SCP_PASSWORD }}
-      run: |
-        sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$SSH_USERNAME@login.g100.cineca.it" 'bash -s' < ./job.sh
+      run: sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$SSH_USERNAME@login.g100.cineca.it" 'bash -s' < ./job.sh

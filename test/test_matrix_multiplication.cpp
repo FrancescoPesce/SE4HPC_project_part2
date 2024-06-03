@@ -4,8 +4,11 @@
 #include <vector>
 #include <gtest/gtest.h>
 
-// We copied the tests in the repository for part 1, with the exception of those that had ill-formed inputs and "TestMultiplySameObject", which causes a SEGFAULT error.
-// Interestingly, "TestMultiplyEmptyMatrices" does not cause a SEGFAULT error with this implementation.
+/*
+We copied the tests that are present in the repository for part 1, with the exception of those 
+that had ill-formed inputs and "TestMultiplySameObject", which causes a SEGFAULT error.
+Interestingly, "TestMultiplyEmptyMatrices" does not cause a SEGFAULT error with this implementation.
+*/
 
 TEST(MatrixMultiplicationTest, TestMultiplyMatrices) {
     std::vector<std::vector<int>> A = {
