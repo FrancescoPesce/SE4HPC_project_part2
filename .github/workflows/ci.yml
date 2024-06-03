@@ -83,13 +83,13 @@ jobs:
     
     - name: Check the execution outputs
       run: |
-      	if ! cmp -s error.txt error_cluster.txt; then
-	      echo "Output files are different!"
-	      exit 1
-	    fi
-	    if ! cmp -s output.txt output_cluster.txt; then
-	      echo "Error files are different!"
-	      exit 1
-	    else
-	      echo "Output and error files match with the expected ones"
-	    fi
+        if ! cmp -s error.txt error_cluster.txt; then
+          echo "Output files are different!"
+          exit 1
+        fi
+        if ! cmp -s output.txt output_cluster.txt; then
+          echo "Error files are different!"
+          exit 1
+        else
+          echo "Output and error files match with the expected ones"
+        fi
