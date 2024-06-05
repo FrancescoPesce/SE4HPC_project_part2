@@ -72,4 +72,4 @@ jobs:
         SSH_USERNAME: ${{ secrets.SCP_USERNAME }}
         SSH_PASSWORD: ${{ secrets.SCP_PASSWORD }}
       run: |
-        sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$SSH_USERNAME@login.g100.cineca.it" 'rm output.txt && rm error.txt && chmod +x job.sh && sbatch job.sh'
+        sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$SSH_USERNAME@login.g100.cineca.it" 'chmod +x job.sh && sbatch job.sh'
