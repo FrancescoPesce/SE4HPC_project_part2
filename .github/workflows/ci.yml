@@ -79,12 +79,12 @@ jobs:
         SCP_USERNAME: ${{ secrets.SCP_USERNAME }}
         SCP_PASSWORD: ${{ secrets.SCP_PASSWORD }}
       run: |
-      	until [ -e sshpass -p "$SCP_PASSWORD" scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/output.txt output_cluster.txt ]; do
-		  sleep 1
-		done
-      	until [ -e sshpass -p "$SCP_PASSWORD" scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/error.txt error_cluster.txt ]; do
-		  sleep 1
-		done
+        until [ -e sshpass -p "$SCP_PASSWORD" scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/output.txt output_cluster.txt ]; do
+          sleep 1
+        done
+        until [ -e sshpass -p "$SCP_PASSWORD" scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r $SCP_USERNAME@login.g100.cineca.it:/g100/home/usertrain/$SCP_USERNAME/error.txt error_cluster.txt ]; do
+          sleep 1
+        done
     
     - name: Check the execution outputs
       run: |
