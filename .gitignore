@@ -1,2 +1,4 @@
 build/
+
+# The image is not uploaded on github because it is too large.
 myimage.sif

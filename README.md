@@ -7,4 +7,5 @@ new implementation of the matrix multiplication function.
 - The file `Singularity.def` contains a container descriptor for the program.
 - The file `job.sh` is used to run the containerized application.
 - The file `.github/workflows/ci.yml` contains the Github actions used to execute the pipeline.
-- We made minor changed to the rest of the repository to be able to use the file `src/matrix_mult.cpp` in the tests.
+- The files `output.txt` and `error.txt` contain the expected output and error from the execution of the application. As an additional step in the Github actions, we compare them with the results from the cluster to make sure the execution worked correctly.
+- We made minor changes to the rest of the repository to be able to use the file `src/matrix_mult.cpp` in the tests.
